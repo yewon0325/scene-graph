@@ -1,3 +1,36 @@
-repos/
-data/
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.tmp
+
+# 로그 / 결과물
 logs/
+*.log
+*.csv
+*.tb
+*.pth
+*.ckpt
+*.h5
+*.npz
+
+# 데이터
+data/
+!data/.gitkeep
+!data/README.md
+!data/sample/
+
+# 외부 repos / 서브모듈 관련 (필요한 코드만 올릴 경우)
+repos/*/ckpt/
+repos/*/data/
+repos/*/logs/
+repos/*/output/
+repos/*/__pycache__/
+repos/*/*.pyc
