@@ -86,6 +86,134 @@ python -u main.py \
   --resume /home/com/sgg-project/repos/RelTR/ckpt/checkpoint0149.pth
 ```
 
+## 재현 절차
+
+다른 PC 또는 새로운 환경에서 현재 실험을 다시 수행하려면, 단순히 코드만 clone하는 것으로는 충분하지 않다. 아래 네 가지를 함께 맞춰야 한다.
+
+1. 코드 저장소
+2. Visual Genome 데이터
+3. pretrained checkpoint
+4. Python / PyTorch / CUDA 환경
+
+### 1. 저장소 clone
+
+```bash
+git clone https://github.com/yevon0325/scene-graph.git
+cd scene-graph
+```
+
+### 2. conda 환경 구성
+
+현재 실험은 WSL + conda 환경에서 수행했다. 기본적으로는 아래와 같은 흐름으로 맞추는 것을 권장한다.
+
+```bash
+source ~/miniconda3/etc/profile.d/conda.sh
+conda create -n sgg_onestage_gpu python=3.10
+conda activate sgg_onestage_gpu
+```
+
+이후 PyTorch, torchvision, 기타 의존 패키지는 현재 GPU/CUDA 환경에 맞게 설치해야 한다. 실제 사용 GPU와 CUDA 버전에 따라 설치 명령은 달라질 수 있다.
+
+### 3. Visual Genome 데이터 준비
+
+RelTR baseline 실험을 위해서는 최소한 아래 구조가 준비되어 있어야 한다.
+
+```text
+/home/com/sgg-project/repos/RelTR/data/vg/
+├── images/
+├── train.json
+├── val.json
+├── test.json
+└── rel.json
+```
+
+즉, 데이터는 `scene-graph/repos/RelTR/data/vg/`가 아니라 현재 로컬 기준으로 `/home/com/sgg-project/repos/RelTR/data/vg/` 위치를 사용하고 있다.
+
+### 4. pretrained checkpoint 준비
+
+다음 파일이 필요하다.
+
+```text
+/home/com/sgg-project/repos/RelTR/ckpt/checkpoint0149.pth
+```
+
+실험 명령은 이 체크포인트 경로를 기준으로 작성되어 있다.
+
+### 5. C extension 빌드
+
+평가 시 bbox overlap 계산을 위해 Cython/C extension이 필요하다. 새 환경에서는 아래 빌드를 다시 수행해야 할 수 있다.
+
+```bash
+cd /home/com/sgg-project/repos/scene-graph/repos/RelTR/lib/fpn/box_intersections_cpu
+python setup.py build_ext --inplace
+```
+
+또는 상위 스크립트를 사용할 수도 있다.
+
+```bash
+cd /home/com/sgg-project/repos/scene-graph/repos/RelTR/lib/fpn
+bash make.sh
+```
+
+### 6. baseline evaluation 실행
+
+```bash
+cd /home/com/sgg-project/repos/scene-graph/repos/RelTR
+
+python -u main.py \
+  --dataset vg \
+  --img_folder /home/com/sgg-project/repos/RelTR/data/vg/images/ \
+  --ann_path /home/com/sgg-project/repos/RelTR/data/vg/ \
+  --eval \
+  --batch_size 1 \
+  --resume /home/com/sgg-project/repos/RelTR/ckpt/checkpoint0149.pth
+```
+
+### 7. fixed sparse / adaptive 실험 실행
+
+fixed sparse 예시:
+
+```bash
+python -u main.py \
+  --dataset vg \
+  --img_folder /home/com/sgg-project/repos/RelTR/data/vg/images/ \
+  --ann_path /home/com/sgg-project/repos/RelTR/data/vg/ \
+  --eval \
+  --batch_size 1 \
+  --resume /home/com/sgg-project/repos/RelTR/ckpt/checkpoint0149.pth \
+  --sparse_query_k 180
+```
+
+adaptive 예시:
+
+```bash
+python -u main.py \
+  --dataset vg \
+  --img_folder /home/com/sgg-project/repos/RelTR/data/vg/images/ \
+  --ann_path /home/com/sgg-project/repos/RelTR/data/vg/ \
+  --eval \
+  --batch_size 1 \
+  --resume /home/com/sgg-project/repos/RelTR/ckpt/checkpoint0149.pth \
+  --sparse_query_k 200 \
+  --adaptive_query_budget \
+  --budget_min 125 \
+  --budget_max 185 \
+  --budget_score_bias 0.62 \
+  --budget_score_scale 0.25 \
+  --enable_budget_floor \
+  --adaptive_budget_floor 125 \
+  --target_avg_budget 155 \
+  --lambda_uncertainty 0.5 \
+  --lambda_degree 1.0
+```
+
+### 8. 재현 시 주의사항
+
+- pretrained checkpoint만 있다고 끝나는 것이 아니라, 데이터 경로와 extension 빌드가 맞아야 한다.
+- PyTorch 버전 차이로 `torch.load` 동작이 달라질 수 있으므로, 현재 코드 수정 상태를 그대로 사용하는 것이 좋다.
+- GPU가 다르면 속도와 메모리 수치는 달라질 수 있다.
+- 실험 로그의 `R@K`, `mR@K`, `time / it`, `max mem`은 하드웨어와 환경에 따라 약간 달라질 수 있다.
+
 ### 2. Fixed sparse evaluation
 
 예시: `K=180`
