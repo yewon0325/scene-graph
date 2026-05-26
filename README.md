@@ -1,4 +1,4 @@
-# Scene Graph Project
+# Dynamic Relation Query Allocation for Scene Graph Generation
 
 ## 연구 개요
 
