@@ -1,36 +1,101 @@
-# Python
+# =========================
+# Python / cache
+# =========================
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 
+# =========================
 # Editor / OS
-.vscode/
+# =========================
 .idea/
 .DS_Store
 *.swp
 *.tmp
 
-# 로그 / 결과물
+# VS Code workspace settings are usually local-only.
+.vscode/
+
+# Local Codex scratch file
+.codex
+
+# =========================
+# Root experiment folders
+# =========================
 logs/
+experiments/
+
+# Keep lightweight project notes/README files if needed.
+!logs/.gitkeep
+!experiments/.gitkeep
+
+# =========================
+# Generic experiment artifacts
+# =========================
 *.log
+*.pid
+*.out
 *.csv
 *.tb
+*.npz
+*.npy
+*.pt
 *.pth
 *.ckpt
 *.h5
-*.npz
 
-# 데이터
+# =========================
+# Large datasets / checkpoints
+# =========================
 data/
 !data/.gitkeep
 !data/README.md
 !data/sample/
 
-# 외부 repos / 서브모듈 관련 (필요한 코드만 올릴 경우)
-repos/*/ckpt/
-repos/*/data/
-repos/*/logs/
-repos/*/output/
-repos/*/__pycache__/
-repos/*/*.pyc
+# =========================
+# RelTR local artifacts
+# =========================
+repos/RelTR/ckpt/
+repos/RelTR/data/
+repos/RelTR/__pycache__/
+repos/RelTR/**/__pycache__/
+repos/RelTR/**/*.pyc
+repos/RelTR/**/*.pyo
+repos/RelTR/**/*.so
+repos/RelTR/**/*.o
+repos/RelTR/**/build/
+
+# RelTR experiment output directories
+repos/RelTR/adaptive*/
+repos/RelTR/soaaqb*/
+repos/RelTR/fixed_sparse*/
+repos/RelTR/eval_topk*/
+repos/RelTR/cp_oaqb*/
+repos/RelTR/mild_tail_boost*/
+repos/RelTR/percentile_tail_boost*/
+repos/RelTR/query_importance_collect*/
+repos/RelTR/tail_boost*/
+repos/RelTR/sparse_k_*.log
+repos/RelTR/eval_topk_*.log
+
+# Keep generated query importance stats out of Git by default.
+repos/RelTR/query_importance_stats.pt
+
+# =========================
+# Scene-Graph-Benchmark local artifacts
+# =========================
+repos/Scene-Graph-Benchmark.pytorch/__pycache__/
+repos/Scene-Graph-Benchmark.pytorch/**/__pycache__/
+repos/Scene-Graph-Benchmark.pytorch/**/*.pyc
+repos/Scene-Graph-Benchmark.pytorch/**/*.pyo
+repos/Scene-Graph-Benchmark.pytorch/**/*.so
+repos/Scene-Graph-Benchmark.pytorch/**/*.o
+repos/Scene-Graph-Benchmark.pytorch/**/build/
+
+# Ignore local dataset/checkpoint artifacts if they appear later.
+repos/Scene-Graph-Benchmark.pytorch/datasets/vg/*.h5
+repos/Scene-Graph-Benchmark.pytorch/datasets/vg/*.pkl
+repos/Scene-Graph-Benchmark.pytorch/datasets/vg/*.json.bak
+repos/Scene-Graph-Benchmark.pytorch/checkpoints/
+repos/Scene-Graph-Benchmark.pytorch/output/
