@@ -382,17 +382,6 @@ RelTR 계열 실험에서는 아래 지표를 중심으로 비교한다.
 - adaptive budget summary / histogram
 
 
-각 지표의 의미는 다음과 같다.
-
-| 지표 | 의미 | 본 연구에서의 해석 |
-|---|---|---|
-| R@20 / R@50 / R@100 | 상위 K개 예측 triplet 안에 정답 relation이 포함되는 비율 | scene graph prediction의 전체 recall 성능을 나타냄 |
-| mR@20 / mR@50 / mR@100 | predicate class별 recall을 평균한 값 | 빈도가 낮은 rare predicate까지 균형 있게 예측하는지 확인하는 지표 |
-| AP@[.50:.95] / AP@0.50 | object detection 품질을 함께 반영하는 COCO-style AP | scene graph 예측 이전 object localization 품질 확인용 |
-| AR@100 | 상위 100개 예측 기준 평균 recall | 전체 후보 예측 품질 확인용 |
-| Time/it | evaluation 한 iteration당 평균 처리 시간 | query budget 감소가 실제 실행 효율에 미치는 영향 확인용 |
-| adaptive budget summary / histogram | 이미지별로 선택된 relation query 수의 분포 | adaptive budget이 특정 값에 몰리는지, 실제로 이미지별 차등 할당이 일어나는지 확인용 |
-
 ## 코드 수정 핵심 파일
 
 현재 실험에서 주로 수정된 파일은 아래와 같다.
