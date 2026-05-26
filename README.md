@@ -28,6 +28,12 @@
 - `repos/Scene-Graph-Benchmark.pytorch`
   two-stage SGG baseline 분석 및 추후 비교 실험용 코드베이스
 
+## RelTR 코드베이스 메모
+
+RelTR는 query-based one-stage Scene Graph Generation 모델이다. 원본 README는 주로 Python 3.6 / PyTorch 1.6 환경을 기준으로 작성되어 있지만, 현재 로컬 실험은 수정된 GPU 환경과 호환성 패치를 반영한 상태에서 진행하고 있다.
+
+따라서 실제 baseline 재현과 후속 실험은 원본 설치 절차 전체를 그대로 따르기보다, 이 프로젝트 루트 README에 정리된 실행 명령, 데이터 경로, 체크포인트 경로, 그리고 로컬 코드 수정 사항을 기준으로 수행한다.
+
 ## 실험 원칙
 
 현재 adaptive 계열 실험에서는 아래 기능을 메인 proposed method에서 사용하지 않는 방향으로 정리하고 있다.
